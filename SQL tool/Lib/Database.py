@@ -12,7 +12,7 @@ import datetime
 
 # SQLite 连接池类
 class SQLiteConnectionPool:
-    def __init__(self, max_connections=5, database_path=r'C:\Users\蓬蒿\Database\ipynb\database_live'):
+    def __init__(self, database_path,max_connections=5):
         self.max_connections = max_connections
         self.database_path = database_path
         self.connections = queue.Queue(maxsize=max_connections)
@@ -31,8 +31,11 @@ class SQLiteConnectionPool:
     def release_connection(self, conn):
         self.connections.put(conn)
 
-# 初始化连接池
-pool = SQLiteConnectionPool(max_connections=5)
+    def set_database_path(self, new_database_path):
+        self.database_path = new_database_path
+
+
+
 
 def create_new_db(my_new_database):
     # 指定新数据库文件的名称
@@ -341,7 +344,11 @@ def clear_all_tables(database_path):
 
 
 def rename_column(database_path, table_name, old_column_name, new_column_name):
+    # 初始化连接池
+    pool = SQLiteConnectionPool(database_path,max_connections=5)
     try:
+        # 修改连接池的数据库路径
+        pool.set_database_path(database_path)
         # 从连接池获取连接
         conn = pool.get_connection()
         cursor = conn.cursor()
@@ -400,7 +407,11 @@ def rename_column(database_path, table_name, old_column_name, new_column_name):
 # rename_column(database_name, table_name, old_column_name, new_column_name, new_column_type)
 
 def modify_column_property(database_path, table_name, column_name, new_data_type):
+    # 初始化连接池
+    pool = SQLiteConnectionPool(database_path,max_connections=5)
     try:
+        # 修改连接池的数据库路径
+        pool.set_database_path(database_path)
         # 从连接池获取连接
         conn = pool.get_connection()
         cursor = conn.cursor()
