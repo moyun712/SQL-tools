@@ -34,6 +34,12 @@ class SQLiteConnectionPool:
 # 初始化连接池
 pool = SQLiteConnectionPool(max_connections=5)
 
+def create_new_db(my_new_database):
+    # 指定新数据库文件的名称
+    database_name = my_new_database+'.db'
+    # 连接到数据库文件，如果文件不存在，会创建新的数据库文件
+    conn = sqlite3.connect(database_name)
+
 
 def show_all_tables(database_name):
     conn = sqlite3.connect(database_name)
