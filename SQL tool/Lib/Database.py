@@ -313,7 +313,10 @@ def drop_table(database_name, table_name):
 
 # 一次性删除所有表格
 def clear_all_tables(database_path):
+    pool = SQLiteConnectionPool(database_path, max_connections=5)
     try:
+        # 修改连接池的数据库路径
+        pool.set_database_path(database_path)
         # 从连接池获取连接
         conn = pool.get_connection()
         cursor = conn.cursor()
